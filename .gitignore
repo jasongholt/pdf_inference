@@ -1,0 +1,279 @@
+# ==================================
+# SECURITY - Sensitive Data
+# ==================================
+# Environment variables and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+
+# Snowflake credentials
+snowflake_creds.json
+*credentials*.json
+*secrets*.json
+config/credentials.yml
+config/secrets.yml
+
+# SSH keys
+id_rsa
+id_dsa
+id_ecdsa
+id_ed25519
+*.ppk
+
+# ==================================
+# PYTHON
+# ==================================
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+.env/
+virtualenv/
+pipenv/
+pyenv/
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+pytestdebug.log
+
+# ==================================
+# JUPYTER NOTEBOOKS
+# ==================================
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+
+# IPython
+profile_default/
+ipython_config.py
+
+# Jupyter Notebook outputs (optional - uncomment to exclude outputs)
+# *.ipynb
+
+# ==================================
+# DATA FILES (potentially sensitive)
+# ==================================
+# Large data files
+*.csv
+*.tsv
+*.xlsx
+*.xls
+*.parquet
+*.feather
+*.h5
+*.hdf5
+*.db
+*.sqlite
+*.sqlite3
+
+# PDF files that might contain sensitive research
+*.pdf
+
+# Backup files
+*.bak
+*.backup
+*.old
+*.orig
+*.tmp
+
+# ==================================
+# LOGS & TEMPORARY FILES
+# ==================================
+*.log
+logs/
+*.log.*
+log/
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ==================================
+# IDEs & EDITORS
+# ==================================
+# VSCode
+.vscode/
+.vscode/*
+!.vscode/settings.json.example
+!.vscode/extensions.json
+!.vscode/tasks.json.example
+
+# PyCharm / IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# ==================================
+# OS SPECIFIC
+# ==================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.directory
+.Trash-*
+
+# ==================================
+# PROJECT SPECIFIC
+# ==================================
+# Output directories
+output/
+outputs/
+results/
+data/processed/
+data/raw/
+models/
+checkpoints/
+
+# Snowflake stage uploads
+uploads/
+staging/
+
+# Cache directories
+.cache/
+cache/
+__cache__/
+
+# Documentation builds
+docs/_build/
+site/
+
+# Cursor/AI-generated scratch files
+scratch/
+.scratch/
+*_scratch.py
+*_test_*.py
+debug_*.py
+temp_*.py
+tmp_*.py
+
+# Cursor-specific (optional - uncomment if you want to sync settings)
+# .cursorrules
+# .cursorignore
+
+# ==================================
+# CLOUD & DEPLOYMENT
+# ==================================
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+
+# Docker
+docker-compose.override.yml
+.dockerignore
+
+# Kubernetes
+*.kubeconfig
+
+# ==================================
+# PACKAGE MANAGERS
+# ==================================
+# UV lock files (auto-generated)
+uv.lock
+
+# Poetry
+poetry.lock
+
+# Node.js (if using)
+node_modules/
+package-lock.json
+yarn.lock
+
+# ==================================
+# EXCEPTIONS (files to include)
+# ==================================
+# Include example/template files
+!.env.example
+!.env.template
+!config.example.json
+!credentials.example.json
+
+# Include specific documentation
+!README.md
+!LICENSE
+!CONTRIBUTING.md
+!CHANGELOG.md
+

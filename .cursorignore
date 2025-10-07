@@ -1,0 +1,76 @@
+# Cursor Ignore File
+# Files and directories that Cursor AI should not index or analyze
+# This improves performance and focuses AI on relevant code
+
+# Directories to completely ignore
+scratch/
+output/
+.git/
+__pycache__/
+.ipynb_checkpoints/
+node_modules/
+.pytest_cache/
+.mypy_cache/
+.tox/
+.venv/
+venv/
+env/
+ENV/
+
+# Large or generated files
+*.pyc
+*.pyo
+*.pyd
+*.so
+*.dll
+*.dylib
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Data files (can be large)
+*.csv
+*.tsv
+*.parquet
+*.feather
+*.h5
+*.hdf5
+*.db
+*.sqlite
+*.sqlite3
+
+# Media files
+*.pdf
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.tiff
+*.mp4
+*.avi
+*.mov
+
+# Log files
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Documentation builds
+docs/_build/
+site/
+
+# Keep Cursor focused on actual code
+# Not on generated outputs or temporary files
+

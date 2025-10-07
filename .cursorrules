@@ -1,0 +1,346 @@
+# Cursor AI Rules for GWAS Intelligence Project
+# ==============================================
+# This file configures AI behavior and best practices for this project
+
+## Project Context
+You are working on a GWAS (Genome-Wide Association Studies) intelligence pipeline that:
+- Extracts genomic data from research papers using Snowflake Cortex AI
+- Uses multimodal RAG (Retrieval Augmented Generation) with text and images
+- Processes PDFs and extracts structured trait data
+- Deploys Streamlit applications to Snowflake
+
+## MCP Server Access
+You have access to the following MCP servers:
+- **Notebook MCP**: For editing Jupyter notebooks (.ipynb files)
+- **Snowflake Docs MCP**: For querying Snowflake documentation and best practices
+
+Always leverage these servers when working with notebooks or Snowflake-related code.
+
+## File Organization Rules
+
+### 1. Documentation Files
+ALL new documentation files (.md) should go in:
+- `/docs/` - for project documentation
+- `/docs/development/` - for development notes, experiments, cursor-generated explanations
+- `/docs/deployment/` - for deployment guides
+- `/docs/security/` - for security documentation
+
+**Never create loose .md files in the root directory** except for:
+- README.md
+- LICENSE
+- CONTRIBUTING.md
+- CHANGELOG.md
+- SECURITY.md
+
+### 2. Test Files
+ALL test files should go in:
+- `/tests/` - for all test files
+- `/tests/unit/` - unit tests
+- `/tests/integration/` - integration tests
+- `/tests/fixtures/` - test data and fixtures
+
+### 3. Temporary/Experimental Files
+Cursor-generated temporary files should go in:
+- `/scratch/` - for experiments, debugging, temporary scripts
+- This folder is gitignored
+
+### 4. Output Files
+All generated outputs should go in:
+- `/output/` - gitignored by default
+- `/output/data/` - processed data
+- `/output/reports/` - generated reports
+- `/output/logs/` - log files
+
+## Snowflake Best Practices
+
+### Security
+1. **NEVER hardcode credentials** - always use environment variables or Snowflake session
+2. **Use get_active_session()** for Streamlit in Snowflake apps
+3. **Prefer key-pair authentication** over password authentication for production
+4. **Always use parameterized queries** to prevent SQL injection
+
+### Code Style
+1. **Use uppercase for SQL keywords**: SELECT, FROM, WHERE, JOIN, etc.
+2. **Fully qualify table names**: DATABASE.SCHEMA.TABLE
+3. **Use database/schema/warehouse context at start**:
+   ```python
+   session.sql("USE DATABASE SYNGENTA").collect()
+   session.sql("USE SCHEMA PDF_PROCESSING").collect()
+   ```
+
+### Performance
+1. **Filter early, aggregate late** - push filtering to SQL not Python
+2. **Use LIMIT for development** - add LIMIT 100 during testing
+3. **Leverage Snowflake stages** for file operations
+4. **Use transient tables** for temporary data:
+   ```sql
+   CREATE TRANSIENT TABLE temp_data ...
+   ```
+5. **Cache expensive queries** with @st.cache_data in Streamlit
+
+### Data Loading
+1. **Use COPY INTO** for bulk loads, not INSERT
+2. **Use stages** for file uploads/downloads
+3. **Leverage file formats**: CREATE FILE FORMAT for consistent parsing
+4. **Use VARIANT** for JSON/semi-structured data
+
+### Cortex AI
+1. **Check model availability**: Use SHOW CORTEX MODELS or documentation
+2. **Handle rate limits**: Implement retry logic with exponential backoff
+3. **Batch embeddings**: Process multiple texts in batches when possible
+4. **Use appropriate models**:
+   - Text embedding: `snowflake-arctic-embed-l-v2.0`
+   - Multimodal: `voyage-multimodal-3`
+   - LLM: `mistral-large2`, `llama3.1-70b`
+
+### Search Service
+1. **Create search services** for vector/hybrid search instead of manual similarity
+2. **Use multi-index queries** for combining text and image embeddings
+3. **Specify columns** explicitly in search queries
+4. **Apply filters** to limit search scope (e.g., by document_id)
+
+## Streamlit Best Practices
+
+### Session State
+1. **Initialize session state** at the top of the script:
+   ```python
+   if "key" not in st.session_state:
+       st.session_state.key = default_value
+   ```
+2. **Use session state** for cross-widget communication
+3. **Avoid st.rerun()** unless necessary - prefer natural flow
+
+### Caching
+1. **Cache data loading** with @st.cache_data(ttl=600):
+   ```python
+   @st.cache_data(ttl=600)
+   def load_data():
+       return conn.query("SELECT ...")
+   ```
+2. **Cache resources** with @st.cache_resource:
+   ```python
+   @st.cache_resource
+   def get_connection():
+       return st.connection("snowflake")
+   ```
+3. **Clear cache** when data changes
+
+### UI/UX
+1. **Use columns** for responsive layouts: col1, col2 = st.columns(2)
+2. **Add loading indicators**: with st.spinner("Loading..."):
+3. **Use expanders** for optional content: with st.expander("Details"):
+4. **Provide feedback**: st.success(), st.error(), st.warning(), st.info()
+5. **Use st.form** for grouped inputs to prevent reruns
+6. **Add progress bars** for long operations: st.progress(percent)
+
+### Performance
+1. **Minimize reruns** - use forms, callbacks, and session state wisely
+2. **Lazy load** large datasets - don't load everything at once
+3. **Use pagination** for large tables
+4. **Optimize queries** - fetch only needed columns and rows
+5. **Debounce user input** with st.form or careful state management
+
+### Deployment (Streamlit in Snowflake)
+1. **Use get_active_session()** instead of creating new connection
+2. **Specify QUERY_WAREHOUSE** in CREATE STREAMLIT
+3. **Use EXTERNAL_ACCESS_INTEGRATIONS** for external APIs/PyPI
+4. **Consider COMPUTE_POOL** for container runtime (Python 3.11)
+5. **Test locally first** before deploying to Snowflake
+
+## Python Best Practices
+
+### Code Style
+1. **Follow PEP 8** - use 4 spaces for indentation
+2. **Type hints**: Use them for function parameters and returns
+3. **Docstrings**: Add docstrings to all functions and classes
+4. **Descriptive names**: Use clear, descriptive variable names
+
+### Error Handling
+1. **Use try/except** blocks around Snowflake queries
+2. **Provide helpful error messages** to users
+3. **Log errors** for debugging
+4. **Fail gracefully** - don't let one error crash the entire app
+
+### Jupyter Notebooks
+1. **Clear outputs** before committing: `jupyter nbconvert --clear-output --inplace`
+2. **Use markdown cells** for documentation
+3. **Keep cells focused** - one logical operation per cell
+4. **Number sections** for easy navigation
+5. **Add cell tags** for organization
+
+## Security Rules (CRITICAL)
+
+### Never Commit:
+- ❌ .env files (gitignored)
+- ❌ Credentials, passwords, API keys
+- ❌ Private keys (.pem, .p8, .key)
+- ❌ Connection strings with passwords
+- ❌ Sensitive data files
+- ❌ Jupyter notebook outputs with sensitive data
+
+### Always:
+- ✅ Use environment variables for secrets
+- ✅ Use os.environ.get() or python-dotenv
+- ✅ Add sensitive patterns to .gitignore
+- ✅ Clear notebook outputs before committing
+- ✅ Use Snowflake session authentication when possible
+
+## File Creation Guidelines
+
+### When Creating New Files:
+
+1. **Documentation (.md)**:
+   - → Place in `/docs/` with appropriate subfolder
+   - → Add entry to main README if it's important
+   - → Use clear, descriptive filenames
+
+2. **Python Scripts (.py)**:
+   - → Core code: `/src/` or `/scripts/python/`
+   - → Tests: `/tests/`
+   - → Utilities: `/src/utils/` or `/scripts/python/utils/`
+
+3. **SQL Scripts (.sql)**:
+   - → `/sql/` directory
+   - → Organize by purpose: `/sql/setup/`, `/sql/queries/`, `/sql/migrations/`
+
+4. **Config Files**:
+   - → Root directory for project-level config
+   - → `/config/` for multiple config files
+   - → Always create `.example` versions without secrets
+
+5. **Temporary/Experimental**:
+   - → `/scratch/` - gitignored
+   - → Delete when no longer needed
+   - → Never commit scratch work
+
+## Code Review Checklist
+
+Before suggesting code changes, verify:
+- [ ] No hardcoded credentials or secrets
+- [ ] Error handling is present
+- [ ] Code is properly formatted (PEP 8)
+- [ ] SQL uses uppercase keywords
+- [ ] Tables are fully qualified (DB.SCHEMA.TABLE)
+- [ ] Functions have docstrings
+- [ ] Streamlit queries are cached appropriately
+- [ ] No unnecessary global state
+- [ ] Files are in correct directories
+- [ ] New .md files go in /docs/
+- [ ] Tests go in /tests/
+
+## Common Patterns
+
+### Snowflake Query Pattern
+```python
+@st.cache_data(ttl=600)
+def load_data(param):
+    """Load data from Snowflake with caching."""
+    query = f"""
+    SELECT 
+        column1,
+        column2
+    FROM SYNGENTA.SCHEMA.TABLE
+    WHERE filter_column = '{param}'
+    LIMIT 1000
+    """
+    try:
+        return conn.query(query)
+    except Exception as e:
+        st.error(f"Error loading data: {e}")
+        return pd.DataFrame()
+```
+
+### Streamlit Page Pattern
+```python
+def page_name():
+    """Render the page content."""
+    st.markdown("## Page Title")
+    
+    # Load data with caching
+    data = load_data()
+    
+    if data.empty:
+        st.warning("No data available")
+        return
+    
+    # Display content
+    col1, col2 = st.columns(2)
+    with col1:
+        st.metric("Metric", value)
+    with col2:
+        st.dataframe(data)
+```
+
+### Error Handling Pattern
+```python
+try:
+    result = session.sql(query).collect()
+    if result:
+        process_result(result)
+    else:
+        st.info("No results found")
+except Exception as e:
+    st.error(f"❌ Error: {str(e)}")
+    logger.exception("Detailed error for debugging")
+```
+
+## AI Assistant Behavior
+
+### When Asked to Create Documentation:
+1. Ask where it should go (or default to /docs/)
+2. Suggest appropriate subfolder
+3. Don't clutter root directory
+
+### When Asked to Create Tests:
+1. Place in /tests/ with appropriate structure
+2. Use pytest conventions
+3. Create fixtures in /tests/fixtures/
+
+### When Debugging:
+1. Create temporary files in /scratch/
+2. Suggest cleanup after debugging is complete
+3. Don't commit scratch files
+
+### When Explaining Code:
+1. Offer to create explanation doc in /docs/development/
+2. Keep explanations concise in chat
+3. Create comprehensive docs in files
+
+## Project-Specific Notes
+
+### Database Structure
+- Database: SYNGENTA
+- Schemas: PDF_RAW, PDF_PROCESSING
+- Key tables:
+  - PDF_RAW.PARSED_DOCUMENTS
+  - PDF_PROCESSING.TEXT_PAGES
+  - PDF_PROCESSING.IMAGE_PAGES
+  - PDF_PROCESSING.MULTIMODAL_PAGES
+  - PDF_PROCESSING.GWAS_TRAIT_ANALYTICS
+
+### Embedding Models
+- Text: snowflake-arctic-embed-l-v2.0-8k
+- Multimodal: voyage-multimodal-3
+- Context length: 8K tokens
+
+### Key Workflows
+1. PDF Upload → Stage (@PDF_STAGE)
+2. Parse PDF → TEXT_PAGES + IMAGE_PAGES
+3. Generate Embeddings → MULTIMODAL_PAGES
+4. Create Search Service → Enable RAG queries
+5. Extract Traits → GWAS_TRAIT_ANALYTICS
+6. Visualize → Streamlit App
+
+## Conclusion
+
+Following these rules ensures:
+- ✅ Clean, organized project structure
+- ✅ Secure credential management
+- ✅ Performant Snowflake queries
+- ✅ Professional Streamlit UIs
+- ✅ Maintainable, documented code
+- ✅ No clutter in root directory
+- ✅ Easy collaboration and onboarding
+
+When in doubt, ask before creating files in unusual locations!
+
