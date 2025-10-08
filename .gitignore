@@ -160,6 +160,7 @@ Thumbs.db
 !.vscode/settings.json.example
 !.vscode/extensions.json
 !.vscode/tasks.json.example
+*.code-workspace
 
 # PyCharm / IntelliJ
 .idea/
