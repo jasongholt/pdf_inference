@@ -1,0 +1,11 @@
+definition_version: 1
+streamlit:
+  name: gwas_trait_viewer
+  stage: streamlit_stage
+  query_warehouse: SYNGENTA_DOC_AI_WH_MEDIUM
+  main_file: streamlit_app.py
+  title: "GWAS Trait Extraction Viewer"
+  additional_source_files:
+    - requirements.txt
+    - pyproject.toml
+

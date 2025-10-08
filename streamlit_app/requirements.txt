@@ -1,0 +1,14 @@
+# Streamlit (must be >= 1.49 for SPCS container runtime)
+streamlit>=1.49.0
+
+# Snowflake connectivity
+snowflake-snowpark-python>=1.14.0
+snowflake-core>=0.8.0
+
+# Data manipulation
+pandas>=2.0.0
+
+# Optional: Enhanced data visualization
+# plotly>=5.18.0
+# altair>=5.0.0
+

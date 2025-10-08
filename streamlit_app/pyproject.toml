@@ -1,0 +1,21 @@
+[project]
+name = "gwas-trait-viewer"
+version = "1.0.0"
+description = "GWAS Trait Extraction Viewer - Streamlit app for exploring genomic data"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    "streamlit>=1.49.0",
+    "snowflake-snowpark-python>=1.14.0",
+    "pandas>=2.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "black>=23.0.0",
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
