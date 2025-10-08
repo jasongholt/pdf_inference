@@ -1,0 +1,22 @@
+# GWAS Intelligence Pipeline - Python Dependencies
+# ================================================
+# Install with: pip install -r requirements.txt
+
+# Core Snowflake
+snowflake-snowpark-python>=1.11.1
+python-dotenv>=1.0.0
+
+# Data processing
+pandas>=2.0.0
+numpy>=1.24.0
+
+# PDF processing
+PyMuPDF>=1.23.0
+
+# Jupyter notebook support
+jupyter>=1.0.0
+notebook>=7.0.0
+tqdm>=4.65.0
+
+# Optional: For development
+ipykernel>=6.25.0
