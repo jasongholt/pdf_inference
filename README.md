@@ -102,7 +102,7 @@ SNOWFLAKE_USER=your_username
 SNOWFLAKE_PASSWORD=your_password
 
 # Optional: Override defaults
-SNOWFLAKE_WAREHOUSE=DEMO_JGH
+SNOWFLAKE_WAREHOUSE=your_warehous
 SNOWFLAKE_DATABASE=GWAS
 ```
 
@@ -114,7 +114,7 @@ Open `gwas_extraction_demo.ipynb` and update **Cell 2** if needed:
 
 ```python
 # Configuration
-WAREHOUSE_NAME = "DEMO_JGH"  # Your warehouse name
+WAREHOUSE_NAME = "<warehouse>"  # Your warehouse name
 DATABASE_NAME = "GWAS"        # Database to create
 SCHEMA_RAW = "PDF_RAW"        # Schema for raw PDFs
 SCHEMA_PROCESSING = "PDF_PROCESSING"  # Schema for processed data
@@ -277,37 +277,7 @@ REMOVE @GWAS.PDF_RAW.PDF_STAGE;
 DROP DATABASE IF EXISTS GWAS;
 ```
 
-## 📁 Project Structure
 
-```
-gwas_intelligence/
-├── README.md                          # This file
-├── requirements.txt                   # Python dependencies
-├── .env                              # Your credentials (NOT in git)
-├── .gitignore                        # Git ignore rules
-├── gwas_extraction_demo.ipynb        # Main notebook (START HERE!)
-│
-├── docs/                             # Documentation
-│   ├── development/                  # Dev notes
-│   │   ├── 3-way-merge-simplification.md
-│   │   ├── database-refactoring-plan.md
-│   │   └── refactoring-complete.md
-│   ├── deployment/                   # Deployment guides
-│   └── security/                     # Security docs
-│       └── SECURITY_CHECKLIST.md
-│
-├── sql/                              # SQL scripts
-│   ├── setup/                        # Database setup scripts
-│   └── queries/                      # Useful queries
-│
-├── scratch/                          # Temporary files (gitignored)
-├── tests/                            # Test files
-│   ├── unit/
-│   ├── integration/
-│   └── fixtures/
-│
-└── CURSOR_QUICK_REFERENCE.md         # Cursor AI guide
-```
 
 ### Key Files
 
@@ -369,14 +339,7 @@ session.sql("LIST @GWAS.PDF_RAW.PDF_STAGE").show()
 3. **Snowflake docs**: [Cortex AI Documentation](https://docs.snowflake.com/en/user-guide/snowflake-cortex/overview)
 4. **GitHub Issues**: Report bugs or ask questions
 
-### Debug Mode
 
-To see more detailed output, add to any cell:
-
-```python
-import logging
-logging.basicConfig(level=logging.DEBUG)
-```
 
 ## 🤝 Contributing
 
@@ -394,22 +357,3 @@ See `docs/development/` for developer notes.
 
 See [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
-
-- Built with [Snowflake Cortex AI](https://www.snowflake.com/en/data-cloud/cortex/)
-- Uses [PyMuPDF](https://pymupdf.readthedocs.io/) for PDF processing
-- Inspired by multimodal RAG research
-
----
-
-## 📚 Additional Resources
-
-- [Snowflake Cortex AI Documentation](https://docs.snowflake.com/en/user-guide/snowflake-cortex/overview)
-- [Cortex Search Service](https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-search/cortex-search-overview)
-- [GWAS Catalog](https://www.ebi.ac.uk/gwas/)
-
----
-
-**Questions?** Open an issue or check the `docs/` folder for more detailed guides.
-
-**Happy trait extracting!** 🧬✨
