@@ -1,4 +1,13 @@
 # ==================================
+# PROJECT FOLDERS TO IGNORE
+# ==================================
+docs/
+sql/
+scratch/
+src/
+tests/
+
+# ==================================
 # SECURITY - Sensitive Data
 # ==================================
 # Environment variables and credentials
