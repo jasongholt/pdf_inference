@@ -1,0 +1,35 @@
+[project]
+name = "gwas-intelligence"
+version = "0.1.0"
+description = "GWAS Intelligence Pipeline - Extract genomic trait data from research papers using Snowflake Cortex AI"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+
+dependencies = [
+    "snowflake-snowpark-python>=1.11.1",
+    "python-dotenv>=1.0.0",
+    "pandas>=2.0.0",
+    "numpy>=1.24.0",
+    "PyMuPDF>=1.23.0",
+    "jupyter>=1.0.0",
+    "notebook>=7.0.0",
+    "tqdm>=4.65.0",
+    "ipykernel>=6.25.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.black]
+line-length = 100
+target-version = ['py310', 'py311', 'py312']
+
