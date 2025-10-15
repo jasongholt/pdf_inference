@@ -241,7 +241,7 @@ def load_documents():
         TOTAL_PAGES as page_count,
         CREATED_AT as extraction_timestamp,
         FILE_PATH as file_url
-    FROM SYNGENTA.PDF_RAW.PARSED_DOCUMENTS
+    FROM GWAS.PDF_RAW.PARSED_DOCUMENTS
     ORDER BY CREATED_AT DESC
     """
     return conn.query(query)
@@ -271,7 +271,7 @@ def load_gwas_traits(document_id):
         traits_extracted,
         traits_not_reported,
         extraction_accuracy_pct
-    FROM SYNGENTA.PDF_PROCESSING.GWAS_TRAIT_ANALYTICS
+    FROM GWAS.PDF_PROCESSING.GWAS_TRAIT_ANALYTICS
     WHERE document_id = '{document_id}'
     """
     return conn.query(query)
@@ -286,7 +286,7 @@ def load_document_pages(document_id):
         image_path,
         has_text,
         has_image
-    FROM SYNGENTA.PDF_PROCESSING.MULTIMODAL_PAGES
+    FROM GWAS.PDF_PROCESSING.MULTIMODAL_PAGES
     WHERE document_id = '{document_id}'
     ORDER BY page_number
     """
@@ -299,7 +299,7 @@ def load_text_pages(document_id):
     SELECT 
         page_number,
         LENGTH(page_text) as text_length
-    FROM SYNGENTA.PDF_PROCESSING.TEXT_PAGES
+    FROM GWAS.PDF_PROCESSING.TEXT_PAGES
     WHERE document_id = '{document_id}'
     ORDER BY page_number
     """
@@ -312,7 +312,7 @@ def load_image_pages(document_id):
     SELECT 
         page_number,
         image_file_path as image_path
-    FROM SYNGENTA.PDF_PROCESSING.IMAGE_PAGES
+    FROM GWAS.PDF_PROCESSING.IMAGE_PAGES
     WHERE document_id = '{document_id}'
     ORDER BY page_number
     """
@@ -654,7 +654,7 @@ def page_browser():
                 
                 # Build scoped file URL for SnowflakeFile
                 scoped_url_query = f"""
-                SELECT BUILD_SCOPED_FILE_URL(@SYNGENTA.PDF_RAW.PDF_STAGE, '{image_path}') as scoped_url
+                SELECT BUILD_SCOPED_FILE_URL(@GWAS.PDF_RAW.PDF_STAGE, '{image_path}') as scoped_url
                 """
                 
                 result = session.sql(scoped_url_query).collect()
@@ -671,7 +671,7 @@ def page_browser():
                     
                     with st.expander("📁 Image Details"):
                         st.caption(f"**Stage Path:** `{page_data['IMAGE_PATH']}`")
-                        st.caption(f"**Full Path:** `@SYNGENTA.PDF_RAW.PDF_STAGE/{image_path}`")
+                        st.caption(f"**Full Path:** `@GWAS.PDF_RAW.PDF_STAGE/{image_path}`")
                         st.caption(f"**File Size:** {len(image_bytes):,} bytes")
                 else:
                     st.warning("Could not generate scoped URL")
@@ -950,7 +950,7 @@ def page_chatbot():
                         FLATTEN(
                             PARSE_JSON(
                                 SNOWFLAKE.CORTEX.SEARCH_PREVIEW(
-                                    'SYNGENTA.PDF_PROCESSING.MULTIMODAL_SEARCH_SERVICE',
+                                    'GWAS.PDF_PROCESSING.MULTIMODAL_SEARCH_SERVICE',
                                     '{{
                                         "multi_index_query": {{
                                             "page_text": {{"text": "{question_json}"}},
